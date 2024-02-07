@@ -12,20 +12,10 @@ namespace real_time_horror_group4
         string _username;
         string _password;
 
-        public Guid Guid
-        {
-            get => _guid;
-        }
+        public Guid Guid => _guid;
 
-        public string Username
-        {
-            get => _username; 
-        }
-
-        public string Password 
-        {
-            get => _password; 
-        }
+        public string Username => _username; 
+        public string Password => _password; 
 
         public User(string username, string password)
         { 

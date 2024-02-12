@@ -35,8 +35,8 @@ void HandleRequest(IAsyncResult result)
     if (result.AsyncState is HttpListener listener)
     {
         HttpListenerContext context = listener.EndGetContext(result);
+        Router(context);
 
-        Router( context);
 
         listener.BeginGetContext(new AsyncCallback(HandleRequest), listener);
     }
@@ -52,7 +52,7 @@ void Router(HttpListenerContext context)
             RootGet(response);
             break;
         case ("GET", "/hello"):
-            helloGet(response);
+            Leaderboard(response);
             break;
         case ("POST", "/"):
             RootPost(request, response);
@@ -74,9 +74,9 @@ void RootGet(HttpListenerResponse response)
     response.OutputStream.Close();
 }
 
-void helloGet(HttpListenerResponse response)
+void Leaderboard(HttpListenerResponse response)
 {
-    string message = "test naveen"; // byt ut till vilken text som ska skickas tillbaka
+    string message = "hello"; // byt ut till vilken text som ska skickas tillbaka
     byte[] buffer = Encoding.UTF8.GetBytes(message);
     response.ContentType = "text/plain";
     response.StatusCode = (int)HttpStatusCode.OK;

@@ -1,59 +1,39 @@
-﻿using Npgsql;
-using System.Threading.Tasks;
-
-using System.Threading.Tasks;
-
-public class DBcreate
+﻿namespace real_time_horror_group4;
+using Npgsql;
+public class Tables(NpgsqlDataSource db)
 {
-    NpgsqlConnection _db;
-
-    public DBcreate(NpgsqlConnection db)
+    public async Task CreateTables()
     {
-        _db = db;
+        await db.CreateCommand("DROP TABLE IF EXISTS correctanswers").ExecuteNonQueryAsync();
+        await db.CreateCommand("DROP TABLE IF EXISTS questions").ExecuteNonQueryAsync();
+        await db.CreateCommand("DROP TABLE IF EXISTS qusers").ExecuteNonQueryAsync();
+
+        string qUsers = @"
+         CREATE TABLE IF NOT EXISTS Users(
+         ID SERIAL PRIMARY KEY, 
+         username TEXT, password TEXT
+        );";
+
+        string qQuestions = @"
+         CREATE TABLE IF NOT EXISTS Questions(
+         ID SERIAL PRIMARY KEY, questions TEXT
+        );";
+
+
+        string qAnswers = @"
+         CREATE TABLE IF NOT EXISTS CorrectAnswers( 
+         ID SERIAL PRIMARY KEY, answer TEXT, 
+         questionID INT REFERENCES Questions(ID)
+        );";
+
+        await db.CreateCommand(qUsers).ExecuteNonQueryAsync();
+        await db.CreateCommand(qQuestions).ExecuteNonQueryAsync();
+        await db.CreateCommand(qAnswers).ExecuteNonQueryAsync();
+
     }
 
-    public DBcreate(NpgsqlDataSource db)
-    {
-    }
 
-    public async Task CreateTable()
-    {
-        await _db.OpenAsync();
 
-        using (var cmd = _db.CreateCommand())
-        {
-            cmd.CommandText = "DROP TABLE IF EXISTS Users";
-            await cmd.ExecuteNonQueryAsync();
-        }
 
-        using (var cmd = _db.CreateCommand())
-        {
-            cmd.CommandText = "DROP TABLE IF EXISTS Questions";
-            await cmd.ExecuteNonQueryAsync();
-        }
 
-        using (var cmd = _db.CreateCommand())
-        {
-            cmd.CommandText = "DROP TABLE IF EXISTS CorrectAnswers";
-            await cmd.ExecuteNonQueryAsync();
-        }
-
-        using (var cmd = _db.CreateCommand())
-        {
-            cmd.CommandText = "CREATE TABLE IF NOT EXISTS Users(ID SERIAL PRIMARY KEY, username TEXT, password TEXT)";
-            await cmd.ExecuteNonQueryAsync();
-        }
-
-        using (var cmd = _db.CreateCommand())
-        {
-            cmd.CommandText = "CREATE TABLE IF NOT EXISTS Questions (ID SERIAL PRIMARY KEY, question TEXT)";
-            await cmd.ExecuteNonQueryAsync();
-        }
-
-        using (var cmd = _db.CreateCommand())
-        {
-            cmd.CommandText = "CREATE TABLE IF NOT EXISTS CorrectAnswers (ID SERIAL PRIMARY KEY, answer TEXT, questionID INT REFERENCES Questions(ID))";
-            await cmd.ExecuteNonQueryAsync();
-        }
-    }
 }

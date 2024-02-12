@@ -1,6 +1,20 @@
 ﻿using System.Net;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text;
+using Npgsql;
+
+
+
+    static async Task Main(string[] args)
+    {
+        const string connectionString = "Host=localhost;Port=5455;Username=postgres;Password=postgres;Database=Horror#4";
+
+        using var db = new NpgsqlConnection(connectionString);
+
+        var adminMenu = new DBcreate(db);
+        await adminMenu.CreateTable();
+    }
+
 
 bool listen = true;
 

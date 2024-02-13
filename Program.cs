@@ -12,9 +12,9 @@ await using var db = NpgsqlDataSource.Create(connectionString);
 Tables table = new Tables(db);
 await table.CreateTables();
 
-InsertInfo insert = new InsertInfo(db);
-await insert.PopulateQuestions();
-await insert.PopulateAnswers();
+//InsertInfo insert = new InsertInfo(db);
+//await insert.PopulateQuestions();
+//await insert.PopulateAnswers();
 
 
 bool listen = true;
@@ -57,11 +57,7 @@ void HandleRequest(IAsyncResult result)
     }
 
 }
-void Router(HttpListenerContext context)
-{
-    HttpListenerRequest request = context.Request;
-    HttpListenerResponse response = context.Response;
-    Get getters = new Get(request, db);
+
 
     void Router(HttpListenerContext context)
     {
@@ -132,4 +128,5 @@ void Router(HttpListenerContext context)
         res.StatusCode = (int)HttpStatusCode.NotFound;
         res.Close();
     }
-}
+
+

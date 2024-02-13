@@ -2,12 +2,11 @@ using Npgsql;
 using System.IO;
 namespace real_time_horror_group4;
 
-public class InsertQuestions
+public class InsertInfo
 {
-
-    NpgsqlConnection _db;
-
-    public dbUri(npgsqlDataSource db)
+    
+    private readonly NpgsqlDataSource _db;
+    public InsertInfo(NpgsqlDataSource db)
     {
         _db = db;
     }
@@ -21,7 +20,7 @@ public class InsertQuestions
             string question = questions[i];
             await using (var cmd = _db.CreateCommand(query))
             {
-                cmd.Paramaters.AddWithValue(question);
+                cmd.Parameters.AddWithValue(question);
                 await cmd.ExecuteNonQueryAsync();
             }
         }
@@ -39,8 +38,8 @@ public class InsertQuestions
 
             await using (var cmd = _db.CreateCommand(query))
             {
-                cmd.Paramaters.AddwithValue(answerArray[0]);
-                cmd.Paramaters.AddwithValue(answerArray[1]);
+                cmd.Parameters.AddWithValue(answerArray[0]);
+                cmd.Parameters.AddWithValue(answerArray[1]);
                 await cmd.ExecuteNonQueryAsync();
             }
         }

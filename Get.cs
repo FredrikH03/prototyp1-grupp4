@@ -22,7 +22,8 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
         return test;
 
     }
-    public string getter()
+     
+    public string getter()// vi kör denna typen av metoden för vi vill returna string, void returnar inte.
     {
         if(path != null)
         {
@@ -32,11 +33,11 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
 
             }
-            if (path.Contains("/"))
+            if (path.Contains("/leaderboard"))
             {
 
 
-                //return nästa metod
+                return leaderboard(); // här vill vi return senaste metoden.
 
 
             }
@@ -51,6 +52,18 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
     }
 
+
+     
+    
+
+    public string leaderboard()
+    {
+        string key = "melih";
+
+        return key;
+    }
+        
+    
 
 
 }

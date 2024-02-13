@@ -2,18 +2,16 @@
 using static System.Net.Mime.MediaTypeNames;
 using System.Text;
 using Npgsql;
+using real_time_horror_group4;
 
 
+string connectionString = "Host=localhost;Port=5455;Username=postgres;Password=postgres;Database=Horror#4";
 
-    static async Task Main(string[] args)
-    {
-        const string connectionString = "Host=localhost;Port=5455;Username=postgres;Password=postgres;Database=Horror#4";
+await using var db = NpgsqlDataSource.Create(connectionString);
 
-        using var db = new NpgsqlConnection(connectionString);
+Tables table = new Tables(db);
+await table.CreateTables();
 
-        var adminMenu = new DBcreate(db);
-        await adminMenu.CreateTable();
-    }
 
 
 bool listen = true;
@@ -54,21 +52,27 @@ void HandleRequest(IAsyncResult result)
 
         listener.BeginGetContext(new AsyncCallback(HandleRequest), listener);
     }
+
 }
 void Router(HttpListenerContext context)
 {
     HttpListenerRequest request = context.Request;
     HttpListenerResponse response = context.Response;
+    Get getters = new Get(request, db);
 
-    switch (request.HttpMethod, request.Url?.AbsolutePath)
+
+    switch (request.HttpMethod)
     {
-        case ("GET", "/"):
-            RootGet(response);
+      
+        case ("GET"):
+            byte[] buffer = Encoding.UTF8.GetBytes(getters.getter());
+            response.ContentType = "text/plain";
+            response.StatusCode = (int)HttpStatusCode.OK;
+
+            response.OutputStream.Write(buffer, 0, buffer.Length);
+            response.OutputStream.Close();
             break;
-        case ("GET", "/hello"):
-            Leaderboard(response);
-            break;
-        case ("POST", "/"):
+        case ("POST"):
             RootPost(request, response);
             break;
         default:
@@ -80,7 +84,7 @@ void Router(HttpListenerContext context)
 void RootGet(HttpListenerResponse response)
 {
     string message = "test"; // byt ut till vilken text som ska skickas tillbaka
-    byte[] buffer = Encoding. UTF8.GetBytes(message);
+    byte[] buffer = Encoding.UTF8.GetBytes(message);
     response.ContentType = "text/plain";
     response.StatusCode = (int)HttpStatusCode.OK;
 

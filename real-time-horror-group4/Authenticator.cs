@@ -37,6 +37,13 @@ namespace real_time_horror_group4
             _httpListenerContext.Response.OutputStream.Write(buffer);
         }
 
+        private int GetLargestId(List<User> users)
+        {
+            int largestId = users.Max(id => users.Count);
+            largestId++;
+            return largestId;
+        }
+
         private bool Login(List<User> users)
         {
             bool success = false;
@@ -48,9 +55,14 @@ namespace real_time_horror_group4
                 if (userLoginRequest[0] == user.Username && userLoginRequest[1] == user.Password)
                 {
                     OutputMessage($@"Successful authentication. 
-                                                      Your session ID is {user.Guid}.
+                                                      Your session ID is {user.Id}.
                                                       Usage: <ID>,<commands>");
                     //Save session GUID to database.
+                    
+                    string successfullLoginMessage = "Successful login registration";
+                    OutputMessage(successfullLoginMessage);
+                    Console.WriteLine(successfullLoginMessage);
+
                     success = true;
                 }
             }
@@ -65,7 +77,10 @@ namespace real_time_horror_group4
                                                                       InputStream.
                                                                       ToString().
                                                                       Split(',');
-            users.Add(new User(userRegistrationRequest[0], userRegistrationRequest[1]));
+
+            users.Add(new User(userRegistrationRequest[0],
+                                              userRegistrationRequest[1],
+                                              GetLargestId(users)));
 
             string successfullRegistrationMessage = "Successful user registration";
             OutputMessage(successfullRegistrationMessage);

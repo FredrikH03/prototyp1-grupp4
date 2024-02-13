@@ -8,20 +8,20 @@ namespace real_time_horror_group4
 {
     public class User
     {
-        Guid _guid;
+        int _id;
         string _username;
         string _password;
 
-        public Guid Guid => _guid;
+        public int Id => _id;
 
         public string Username => _username; 
         public string Password => _password; 
 
-        public User(string username, string password)
+        public User(string username, string password, int id)
         { 
             _username = username;
             _password = password;
-            _guid = Guid.NewGuid();
+            _id = id;
         }
     }
 }

@@ -1,6 +1,21 @@
 ﻿using System.Net;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text;
+using Npgsql;
+using real_time_horror_group4;
+
+
+string connectionString = "Host=localhost;Port=5455;Username=postgres;Password=postgres;Database=Horror#4";
+
+await using var db = NpgsqlDataSource.Create(connectionString);
+
+Tables table = new Tables(db);
+await table.CreateTables();
+
+InsertInfo insert = new InsertInfo(db);
+await insert.PopulateQuestions();
+await insert.PopulateAnswers();
+
 
 bool listen = true;
 
@@ -40,71 +55,81 @@ void HandleRequest(IAsyncResult result)
 
         listener.BeginGetContext(new AsyncCallback(HandleRequest), listener);
     }
+
 }
 void Router(HttpListenerContext context)
 {
     HttpListenerRequest request = context.Request;
     HttpListenerResponse response = context.Response;
+    Get getters = new Get(request, db);
 
-    string path = request.Url?.AbsolutePath;
-    string lastpath = request.Url?.AbsolutePath.Split("/").Last();
-
-    switch (request.HttpMethod, request.Url?.AbsolutePath)
+    void Router(HttpListenerContext context)
     {
-        case ("GET", "/"):
-            RootGet(response);
-            break;
-        case ("GET", "/hello"):
-            Leaderboard(response);
-            break;
-        case ("POST", "/"):
-            RootPost(request, response);
-            break;
-        default:
-            NotFound(response);
-            break;
+        HttpListenerRequest request = context.Request;
+        HttpListenerResponse response = context.Response;
+        Get getters = new Get(request, db);
+
+
+        switch (request.HttpMethod)
+        {
+
+            case ("GET"):
+                byte[] buffer = Encoding.UTF8.GetBytes(getters.getter());
+                response.ContentType = "text/plain";
+                response.StatusCode = (int)HttpStatusCode.OK;
+
+                response.OutputStream.Write(buffer, 0, buffer.Length);
+                response.OutputStream.Close();
+                break;
+            case ("POST"):
+                RootPost(request, response);
+                break;
+            default:
+                NotFound(response);
+                break;
+        }
     }
-}
 
-void RootGet(HttpListenerResponse response)
-{
-    string message = "test"; // byt ut till vilken text som ska skickas tillbaka
-    byte[] buffer = Encoding. UTF8.GetBytes(message);
-    response.ContentType = "text/plain";
-    response.StatusCode = (int)HttpStatusCode.OK;
+    void RootGet(HttpListenerResponse response)
+    {
+        string message = "test"; // byt ut till vilken text som ska skickas tillbaka
+        byte[] buffer = Encoding.UTF8.GetBytes(message);
+        response.ContentType = "text/plain";
+        response.StatusCode = (int)HttpStatusCode.OK;
 
-    response.OutputStream.Write(buffer, 0, buffer.Length);
-    response.OutputStream.Close();
-}
-
+        response.OutputStream.Write(buffer, 0, buffer.Length);
+        response.OutputStream.Close();
+    }
 
 
-void Leaderboard(HttpListenerResponse response)
-{
-    string message = "hello"; // byt ut till vilken text som ska skickas tillbaka
-    byte[] buffer = Encoding.UTF8.GetBytes(message);
-    response.ContentType = "text/plain";
-    response.StatusCode = (int)HttpStatusCode.OK;
 
-    response.OutputStream.Write(buffer, 0, buffer.Length);
-    response.OutputStream.Close();
-}
+    void Leaderboard(HttpListenerResponse response)
+    {
+        string message = "hello"; // byt ut till vilken text som ska skickas tillbaka
+        byte[] buffer = Encoding.UTF8.GetBytes(message);
+        response.ContentType = "text/plain";
+        response.StatusCode = (int)HttpStatusCode.OK;
 
-void RootPost(HttpListenerRequest req, HttpListenerResponse res)
-{
-    StreamReader reader = new(req.InputStream, req.ContentEncoding);
-    string body = reader.ReadToEnd();
+        response.OutputStream.Write(buffer, 0, buffer.Length);
+        response.OutputStream.Close();
+    }
 
-    // metod här för att hantera request body 
-    Console.WriteLine($"Created the following in db: {body}");
+    void RootPost(HttpListenerRequest req, HttpListenerResponse res)
+    {
+        StreamReader reader = new(req.InputStream, req.ContentEncoding);
+        string body = reader.ReadToEnd();
 
-    res.StatusCode = (int)HttpStatusCode.Created;
-    res.Close();
-}
+        // metod här för att hantera request body 
+        Console.WriteLine($"Created the following in db: {body}");
+
+        res.StatusCode = (int)HttpStatusCode.Created;
+        res.Close();
+    }
 
 
-void NotFound(HttpListenerResponse res)
-{
-    res.StatusCode = (int)HttpStatusCode.NotFound;
-    res.Close();
+    void NotFound(HttpListenerResponse res)
+    {
+        res.StatusCode = (int)HttpStatusCode.NotFound;
+        res.Close();
+    }
 }

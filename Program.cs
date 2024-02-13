@@ -46,6 +46,9 @@ void Router(HttpListenerContext context)
     HttpListenerRequest request = context.Request;
     HttpListenerResponse response = context.Response;
 
+    string path = request.Url?.AbsolutePath;
+    string lastpath = request.Url?.AbsolutePath.Split("/").Last();
+
     switch (request.HttpMethod, request.Url?.AbsolutePath)
     {
         case ("GET", "/"):
@@ -73,6 +76,8 @@ void RootGet(HttpListenerResponse response)
     response.OutputStream.Write(buffer, 0, buffer.Length);
     response.OutputStream.Close();
 }
+
+
 
 void Leaderboard(HttpListenerResponse response)
 {

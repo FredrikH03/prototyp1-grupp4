@@ -22,6 +22,24 @@ public class DBcreate
 
         using (var cmd = _db.CreateCommand())
         {
+            cmd.CommandText = "DROP TABLE IF EXISTS Users";
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        using (var cmd = _db.CreateCommand())
+        {
+            cmd.CommandText = "DROP TABLE IF EXISTS Questions";
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        using (var cmd = _db.CreateCommand())
+        {
+            cmd.CommandText = "DROP TABLE IF EXISTS CorrectAnswers";
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        using (var cmd = _db.CreateCommand())
+        {
             cmd.CommandText = "CREATE TABLE IF NOT EXISTS Users(ID SERIAL PRIMARY KEY, username TEXT, password TEXT)";
             await cmd.ExecuteNonQueryAsync();
         }

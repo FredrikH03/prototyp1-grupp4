@@ -1,5 +1,6 @@
-namespace real_time_horror_group4;
+using Npgsql;
 using System.IO;
+namespace real_time_horror_group4;
 
 public class InsertQuestions
 {

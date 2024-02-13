@@ -12,6 +12,9 @@ await using var db = NpgsqlDataSource.Create(connectionString);
 Tables table = new Tables(db);
 await table.CreateTables();
 
+InsertInfo insert = new InsertInfo(db);
+await insert.PopulateQuestions();
+await insert.PopulateAnswers();
 
 
 bool listen = true;

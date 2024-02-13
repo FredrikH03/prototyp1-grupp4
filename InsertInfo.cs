@@ -13,7 +13,7 @@ public class InsertInfo
 
     public async Task PopulateQuestions()
     {
-        const string query = @"INSERT INTO questions(question) VALUES ($1)";
+        const string query = @"INSERT INTO Questions(questions) VALUES ($1)";
         string[] questions = File.ReadAllLines("data/questions.txt");
         for (int i = 0; i < questions.Length; i++)
         {
@@ -28,7 +28,7 @@ public class InsertInfo
 
     public async Task PopulateAnswers()
     {
-        const string query = @"INSERT INTO answers(answer, question_id) VALUES ($1, $2)";
+        const string query = @"INSERT INTO CorrectAnswers(answer, questionID) VALUES ($1, $2)";
         string[] answers = File.ReadAllLines("data/answers.csv");
         
         for (int i = 0; i < answers.Length; i++)
@@ -39,7 +39,7 @@ public class InsertInfo
             await using (var cmd = _db.CreateCommand(query))
             {
                 cmd.Parameters.AddWithValue(answerArray[0]);
-                cmd.Parameters.AddWithValue(answerArray[1]);
+                cmd.Parameters.AddWithValue(int.Parse(answerArray[1]));
                 await cmd.ExecuteNonQueryAsync();
             }
         }

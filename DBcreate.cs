@@ -33,12 +33,12 @@ public class Tables(NpgsqlDataSource db)
 
         //inserta into values
 
-        string qInsertQ = @"
+        //string qInsertQ = @"
 
 
 
 
-        );";
+        //);";
 
     }
 

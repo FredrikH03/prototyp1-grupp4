@@ -94,6 +94,7 @@ void RootGet(HttpListenerResponse response)
 
 void Leaderboard(HttpListenerResponse response)
 {
+    string message = "hi";
     byte[] buffer = Encoding.UTF8.GetBytes(message); // lägg in metod av det som visar leaderboard inne.
     response.ContentType = "text/plain";
     response.StatusCode = (int)HttpStatusCode.OK;

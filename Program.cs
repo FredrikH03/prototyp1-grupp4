@@ -26,6 +26,19 @@ await table.CreateTables();
 //        break;
 //}
 
+InsertInfo insert = new InsertInfo(db);
+Console.WriteLine("do you want to populate questions and answers? y/N");
+switch (Console.ReadLine())
+{
+    case "y":
+        await insert.PopulateQuestions();
+        await insert.PopulateAnswers();
+        break;
+    default:
+        break;
+}
+
+
 
 bool listen = true;
 
@@ -67,14 +80,9 @@ void HandleRequest(IAsyncResult result)
     }
 
 }
-void Router(HttpListenerContext context)
-{
-    HttpListenerRequest request = context.Request;
-    HttpListenerResponse response = context.Response;
-    Get getters = new Get(request, db);
 
 
-    switch (request.HttpMethod)
+    void Router(HttpListenerContext context)
     {
       
         case ("GET"):
@@ -91,19 +99,41 @@ void Router(HttpListenerContext context)
         default:
             NotFound(response);
             break;
+        HttpListenerRequest request = context.Request;
+        HttpListenerResponse response = context.Response;
+        Get getters = new Get(request, db);
+
+
+        switch (request.HttpMethod)
+        {
+
+            case ("GET"):
+                byte[] buffer = Encoding.UTF8.GetBytes(getters.getter());
+                response.ContentType = "text/plain";
+                response.StatusCode = (int)HttpStatusCode.OK;
+
+                response.OutputStream.Write(buffer, 0, buffer.Length);
+                response.OutputStream.Close();
+                break;
+            case ("POST"):
+                RootPost(request, response);
+                break;
+            default:
+                NotFound(response);
+                break;
+        }
     }
-}
 
-void RootGet(HttpListenerResponse response)
-{
-    string message = "test"; // byt ut till vilken text som ska skickas tillbaka
-    byte[] buffer = Encoding.UTF8.GetBytes(message);
-    response.ContentType = "text/plain";
-    response.StatusCode = (int)HttpStatusCode.OK;
+    void RootGet(HttpListenerResponse response)
+    {
+        string message = "test"; // byt ut till vilken text som ska skickas tillbaka
+        byte[] buffer = Encoding.UTF8.GetBytes(message);
+        response.ContentType = "text/plain";
+        response.StatusCode = (int)HttpStatusCode.OK;
 
-    response.OutputStream.Write(buffer, 0, buffer.Length);
-    response.OutputStream.Close();
-}
+        response.OutputStream.Write(buffer, 0, buffer.Length);
+        response.OutputStream.Close();
+    }
 
 void Leaderboard(HttpListenerResponse response)
 {
@@ -112,25 +142,35 @@ void Leaderboard(HttpListenerResponse response)
     response.ContentType = "text/plain";
     response.StatusCode = (int)HttpStatusCode.OK;
 
-    response.OutputStream.Write(buffer, 0, buffer.Length);
-    response.OutputStream.Close();
-}
 
-void RootPost(HttpListenerRequest req, HttpListenerResponse res)
-{
-    StreamReader reader = new(req.InputStream, req.ContentEncoding);
-    string body = reader.ReadToEnd();
+    void Leaderboard(HttpListenerResponse response)
+    {
+        string message = "hello"; // byt ut till vilken text som ska skickas tillbaka
+        byte[] buffer = Encoding.UTF8.GetBytes(message);
+        response.ContentType = "text/plain";
+        response.StatusCode = (int)HttpStatusCode.OK;
 
-    // metod här för att hantera request body 
-    Console.WriteLine($"Created the following in db: {body}");
+        response.OutputStream.Write(buffer, 0, buffer.Length);
+        response.OutputStream.Close();
+    }
 
-    res.StatusCode = (int)HttpStatusCode.Created;
-    res.Close();
-}
+    void RootPost(HttpListenerRequest req, HttpListenerResponse res)
+    {
+        StreamReader reader = new(req.InputStream, req.ContentEncoding);
+        string body = reader.ReadToEnd();
+
+        // metod här för att hantera request body 
+        Console.WriteLine($"Created the following in db: {body}");
+
+        res.StatusCode = (int)HttpStatusCode.Created;
+        res.Close();
+    }
 
 
-void NotFound(HttpListenerResponse res)
-{
-    res.StatusCode = (int)HttpStatusCode.NotFound;
-    res.Close();
-}
+    void NotFound(HttpListenerResponse res)
+    {
+        res.StatusCode = (int)HttpStatusCode.NotFound;
+        res.Close();
+    }
+
+

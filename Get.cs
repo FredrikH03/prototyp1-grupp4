@@ -1,16 +1,13 @@
-﻿using Npgsql;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace real_time_horror_group4;
-
-public class Get(HttpListenerRequest request, NpgsqlDataSource db)
+namespace real_time_horror_group4
 {
+
     public string? path = request.Url.AbsolutePath;
     public string? Lastpath = request.Url.AbsolutePath.Split("/").Last();
 
@@ -47,7 +44,12 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
             if (path.Contains("/menu"))
             {
                 return menu(); 
+=======
+    public class GET(HttpListenerRequest request)
+    {
 
+
+        
 
             }
             if (path.Contains("/questions"))
@@ -55,19 +57,13 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
 
                 return ShowQuestions();
-
-            }
-
-
-
-        }
+=======
 
 
 
-        return "not found";
 
-    }
 
 
 
+    }
 }

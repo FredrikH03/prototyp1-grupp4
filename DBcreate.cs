@@ -30,6 +30,16 @@ public class Tables(NpgsqlDataSource db)
         await db.CreateCommand(qQuestions).ExecuteNonQueryAsync();
         await db.CreateCommand(qAnswers).ExecuteNonQueryAsync();
 
+
+        //inserta into values
+
+        string qInsertQ = @"
+
+
+
+
+        );";
+
     }
 
 

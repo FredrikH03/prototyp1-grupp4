@@ -67,7 +67,7 @@ void Router(HttpListenerContext context)
         case ("GET"):
             byte[] buffer = Encoding.UTF8.GetBytes(getters.getter());
             response.ContentType = "text/plain";
-            response.StatusCode = (int)HttpStatusCode.OK;
+            response.StatusCode = (int)HttpStatusCode.OK; 
 
             response.OutputStream.Write(buffer, 0, buffer.Length);
             response.OutputStream.Close();
@@ -94,8 +94,7 @@ void RootGet(HttpListenerResponse response)
 
 void Leaderboard(HttpListenerResponse response)
 {
-    string message = "hello"; // byt ut till vilken text som ska skickas tillbaka
-    byte[] buffer = Encoding.UTF8.GetBytes(message);
+    byte[] buffer = Encoding.UTF8.GetBytes(message); // lägg in metod av det som visar leaderboard inne.
     response.ContentType = "text/plain";
     response.StatusCode = (int)HttpStatusCode.OK;
 

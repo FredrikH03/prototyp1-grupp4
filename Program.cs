@@ -13,17 +13,9 @@ Tables table = new Tables(db);
 await table.CreateTables();
 
 
-//InsertInfo insert = new InsertInfo(db);
-//Console.WriteLine("do you want to populate questions and answers? y/N");
-//switch (Console.ReadLine())
-//{
-//    case "y":
-//        await insert.PopulateQuestions();
-//        await insert.PopulateAnswers();
-//        break;
-//    default:
-//        break;
-//}
+InsertInfo insert = new InsertInfo(db); 
+await insert.PopulateQuestions();
+await insert.PopulateAnswers();
 
 
 

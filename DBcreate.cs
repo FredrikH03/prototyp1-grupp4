@@ -47,7 +47,22 @@ public class Tables(NpgsqlDataSource db)
 
         );";
 
+        string qInsertA = @"INSERT INTO correctanswers (answer, questionid) VALUES
+         ('c', 1),
+         ('b', 2),
+         ('c', 3),
+         ('a', 4),
+         ('a', 5),
+         ('b', 6),
+         ('c', 7),
+         ('b', 8),
+         ('a', 9),
+         ('b', 10);";
+
+
         await db.CreateCommand(qInsertQ).ExecuteReaderAsync();
+        await db.CreateCommand(qInsertA).ExecuteReaderAsync();
+
 
     }
 

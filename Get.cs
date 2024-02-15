@@ -60,6 +60,7 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
      
     
 
+
     public string leaderboard()
     {
         string qleaderboard = @"SELECT * FROM leaderboard);";

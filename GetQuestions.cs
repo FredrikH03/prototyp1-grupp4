@@ -18,7 +18,8 @@ public class GetQuestions
         Random random = new Random();
         int num = random.Next(1, 31);
 
-        await using var getQuestions = _db.CreateCommand($"SELECT questions FROM Questions WHERE ID = {num}");
+        await using var getQuestions = _db.CreateCommand("SELECT questions FROM Questions WHERE ID = $1");
+        getQuestions.Parameters.AddWithValue(num);
         await using var reader = await getQuestions.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
@@ -29,11 +30,12 @@ public class GetQuestions
         string userInput = Console.ReadLine();
 
         await using var getAnswer =
-            _db.CreateCommand($"SELECT answer FROM CorrectAnswers WHERE questionid = {num} AND answer = '$1'");
+            _db.CreateCommand("SELECT answer FROM CorrectAnswers WHERE questionid = $1 AND answer = $2");
+                getAnswer.Parameters.AddWithValue(num);
+            getAnswer.Parameters.AddWithValue(userInput);
         await using var reader2 = await getAnswer.ExecuteReaderAsync();
         while (await reader2.ReadAsync())
         {
-            getAnswer.Parameters.AddWithValue(userInput);
             answer = reader2.GetString(0);
         }
         //Console.WriteLine(answer);

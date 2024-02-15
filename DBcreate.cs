@@ -33,12 +33,19 @@ public class Tables(NpgsqlDataSource db)
 
         //inserta into values
 
-        //string qInsertQ = @"
+        string qInsertQ = @"INSERT INTO questions values
+         (1,What is a namespace in C#?,
+         2,What is inheritance?,
+         3,What is encapsulation?,
+         4,What is the 'this' keyword in C#?,
+         5,What is the difference between '==' and 'Equals()' in C#?,
+         6,What is the purpose of the 'async' and 'await' keywords in C#?,
+¨        7,What does HTTP stand for?,
+         8,Whats Manuels main programming language?,
+         9,Which SQL statement is used to delete records from a database?
+         10,What does the SQL keyword 'DISTINCT' do?
 
-
-
-
-        //);";
+        );";
 
     }
 

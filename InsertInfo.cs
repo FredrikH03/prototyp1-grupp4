@@ -4,7 +4,7 @@ namespace real_time_horror_group4;
 
 public class InsertInfo
 {
-    
+
     private readonly NpgsqlDataSource _db;
     public InsertInfo(NpgsqlDataSource db)
     {
@@ -30,7 +30,7 @@ public class InsertInfo
     {
         const string query = @"INSERT INTO CorrectAnswers(answer, questionID) VALUES ($1, $2)";
         string[] answers = File.ReadAllLines("data/answers.csv");
-        
+
         for (int i = 0; i < answers.Length; i++)
         {
             string answerLine = answers[i];
@@ -43,5 +43,5 @@ public class InsertInfo
                 await cmd.ExecuteNonQueryAsync();
             }
         }
-}
+    }
 }

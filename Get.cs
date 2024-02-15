@@ -41,6 +41,10 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
 
             }
+            if (path.Contains("/User"))
+            {
+                return user();
+            }
 
 
 
@@ -58,12 +62,24 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
     public string leaderboard()
     {
-        string key = "melih";
+        string qleaderboard = @"SELECT * FROM leaderboard);";
 
-        return key;
+        return qleaderboard;
+
+
+
+
     }
-        
-    
+
+    public string user()
+    {
+        string qUser = @" 
+        SELECT * FROM users
+        ;";
+
+       return qUser;
+
+    }
 
 
 }

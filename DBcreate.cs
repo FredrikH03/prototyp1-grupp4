@@ -9,9 +9,9 @@ public class Tables(NpgsqlDataSource db)
         await db.CreateCommand("DROP TABLE IF EXISTS qusers").ExecuteNonQueryAsync();
         await db.CreateCommand("DROP TABLE IF EXISTS Leaderboard").ExecuteNonQueryAsync();
 
-
-        string qUsers = @"
-         CREATE TABLE IF NOT EXISTS Users(
+        // skapar userID automatiskt.
+        string qUsers = @" 
+         CREATE TABLE IF NOT EXISTS Users( 
          ID SERIAL PRIMARY KEY, 
          username TEXT, password TEXT
         );";

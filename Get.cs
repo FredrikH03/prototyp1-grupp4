@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,59 +10,55 @@ namespace real_time_horror_group4;
 
 public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 {
+
     public string? path = request.Url.AbsolutePath;
     public string? Lastpath = request.Url.AbsolutePath.Split("/").Last();
 
-    public string test()
+    public string menu()
     {
+        return "Welcome Contestants!\r\n" +
+               "What would you like to do:\r\n" +
+               "Register or Log in\r\n";
 
-        string test = "test";
-
-        return test;
 
     }
-     
-    public string getter()// vi kör denna typen av metoden för vi vill returna string, void returnar inte.
+
+
+        public string ShowQuestions()
     {
-        if(path != null)
+        string qShow = @"SELECT questions FROM questions";
+        string result = string.Empty;
+
+        using (var reader = db.CreateCommand(qShow).ExecuteReader())
         {
-            if (path.Contains("/test"))
+            while (reader.Read())
             {
-                return test(); 
-
-
+                result += reader.GetString(0) + "\n";
             }
-            if (path.Contains("/leaderboard"))
-            {
-
-
-                return leaderboard(); // här vill vi return senaste metoden.
-
-
-            }
-
-
-
         }
 
+            return result;
+        }
 
-
-        return "not found";
-
-    }
-
-
-     
-    
-
-    public string leaderboard()
+    public string Getter()
     {
-        string key = "melih";
+        if (path != null)
+        {
+            if (path.Contains("/menu"))
+            {
+                return menu();
+            }
+            if (path.Contains("/questions"))
+            {
+                return ShowQuestions();
+            }
+            //if (path.Contains("/"))
+            //{
+            //    return Leaderboard();
+            //}
 
-        return key;
+        }
+        return "Not Found";
     }
-        
-    
-
 
 }

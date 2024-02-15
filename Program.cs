@@ -18,6 +18,7 @@ await insert.PopulateQuestions();
 await insert.PopulateAnswers();
 
 
+
 bool listen = true;
 
 /// Handle ctrl + c interup event, and gracefully shut down server
@@ -71,7 +72,7 @@ void HandleRequest(IAsyncResult result)
         {
 
             case ("GET"):
-                byte[] buffer = Encoding.UTF8.GetBytes(getters.getter());
+                byte[] buffer = Encoding.UTF8.GetBytes(getters.Getter());
                 response.ContentType = "text/plain";
                 response.StatusCode = (int)HttpStatusCode.OK;
 

@@ -14,30 +14,47 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
     public string? path = request.Url.AbsolutePath;
     public string? Lastpath = request.Url.AbsolutePath.Split("/").Last();
 
-    public string test()
+    public string menu()
     {
+        return "Welcome Contestants!\r\n" +
+               "What would you like to do:\r\n" +
+               "Register or Log in\r\n";
 
-        string test = "test";
-
-        return test;
 
     }
+
+
+    public string ShowQuestions()
+    {
+        string qShow = @"SELECT questions FROM questions";
+        string result = string.Empty;
+
+        using (var reader = db.CreateCommand(qShow).ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                result += reader.GetString(0) + "\n";
+            }
+        }
+
+        return result;
+    }
+
     public string getter()
     {
         if(path != null)
         {
-            if (path.Contains("/test"))
+            if (path.Contains("/menu"))
             {
-                return test(); 
+                return menu(); 
 
 
             }
-            if (path.Contains("/"))
+            if (path.Contains("/questions"))
             {
 
 
-                //return nästa metod
-
+                return ShowQuestions();
 
             }
 

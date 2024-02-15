@@ -12,9 +12,15 @@ await using var db = NpgsqlDataSource.Create(connectionString);
 Tables table = new Tables(db);
 await table.CreateTables();
 
-InsertInfo insert = new InsertInfo(db);
-await insert.PopulateQuestions();
-await insert.PopulateAnswers();
+
+//InsertInfo insert = new InsertInfo(db);
+//await insert.PopulateQuestions();
+//await insert.PopulateAnswers();
+
+
+
+
+
 
 
 bool listen = true;
@@ -70,7 +76,7 @@ void HandleRequest(IAsyncResult result)
         {
 
             case ("GET"):
-                byte[] buffer = Encoding.UTF8.GetBytes(getters.getter());
+                byte[] buffer = Encoding.UTF8.GetBytes(getters.Getter());
                 response.ContentType = "text/plain";
                 response.StatusCode = (int)HttpStatusCode.OK;
 

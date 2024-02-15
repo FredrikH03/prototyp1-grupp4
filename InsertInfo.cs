@@ -18,22 +18,22 @@ public class InsertInfo
         for (int i = 0; i < questions.Length; i++)
         {
             string question = questions[i];
-            await using (var cmd = _db.CreateCommand(query))
+           await using (var cmd = _db.CreateCommand(query))
             {
                 cmd.Parameters.AddWithValue(question);
                 await cmd.ExecuteNonQueryAsync();
             }
-        }
+       }
     }
 
-    public async Task PopulateAnswers()
+   public async Task PopulateAnswers()
     {
         const string query = @"INSERT INTO CorrectAnswers(answer, questionID) VALUES ($1, $2)";
         string[] answers = File.ReadAllLines("data/answers.csv");
-        
+      
         for (int i = 0; i < answers.Length; i++)
         {
-            string answerLine = answers[i];
+           string answerLine = answers[i];
             string[] answerArray = answerLine.Split(",");
 
             await using (var cmd = _db.CreateCommand(query))

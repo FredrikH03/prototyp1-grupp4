@@ -14,6 +14,9 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
     public string? path = request.Url.AbsolutePath;
     public string? Lastpath = request.Url.AbsolutePath.Split("/").Last();
 
+
+
+   
     public string menu()
     {
         return "Welcome Contestants!\r\n" +
@@ -23,24 +26,46 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
     }
 
-
-        public string ShowQuestions()
+    public string ShowQuestion1() //spelare1 hämtar från denna
     {
-        string qShow = @"SELECT questions FROM questions";
-        string result = string.Empty;
+        List<string> questionList = new List<string>();
 
-        using (var reader = db.CreateCommand(qShow).ExecuteReader())
+        string qFetch = @"SELECT questions FROM questions";
+
+        using (var reader = db.CreateCommand(qFetch).ExecuteReader())
         {
             while (reader.Read())
             {
-                result += reader.GetString(0) + "\n";
+                string question = reader.GetString(0);
+                questionList.Add(question);
             }
         }
 
-            return result;
+        return questionList[0];
+
+    }
+
+    public string ShowQuestion2() //spleare2 hämtar från denna
+    {
+        List<string> questionList = new List<string>();
+
+        string qFetch = @"SELECT questions FROM questions";
+
+        using (var reader = db.CreateCommand(qFetch).ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                string question = reader.GetString(0);
+                questionList.Add(question);
+            }
         }
 
-    public string Getter()
+        return questionList[0];
+
+    }
+
+
+      public string Getter()
     {
         if (path != null)
         {
@@ -48,17 +73,18 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
             {
                 return menu();
             }
-            if (path.Contains("/questions"))
+            if (path.Contains("/questions1"))
             {
-                return ShowQuestions();
+                return ShowQuestion1();
             }
-            //if (path.Contains("/"))
-            //{
-            //    return Leaderboard();
-            //}
+            if (path.Contains("/questions2"))
+            {
+                return ShowQuestion2();
+            }
 
         }
         return "Not Found";
     }
 
+    
 }

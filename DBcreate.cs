@@ -51,7 +51,7 @@ public class Tables(NpgsqlDataSource db)
          (8,'Whats Manuels main programming language?'),
          (9,'Which SQL statement is used to delete records from a database?'),
          (10,'What does the SQL keyword DISTINCT do?'
-
+         
         );";
 
         string qInsertA = @"INSERT INTO correctanswers (answer, questionid) VALUES

@@ -40,6 +40,23 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
             return result;
         }
 
+
+    public string leaderboard()
+    {
+        string qboard = @"SELECT leaderboard FROM questions";
+        string result = string.Empty;
+
+        using (var reader = db.CreateCommand(qboard).ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                result += reader.GetString(0) + "\n";
+            }
+        }
+
+        return result;
+    }
+
     public string Getter()
     {
         if (path != null)
@@ -52,10 +69,10 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
             {
                 return ShowQuestions();
             }
-            //if (path.Contains("/"))
-            //{
-            //    return Leaderboard();
-            //}
+            if (path.Contains("/leaderboard"))
+            {
+                return leaderboard();
+            }
 
         }
         return "Not Found";

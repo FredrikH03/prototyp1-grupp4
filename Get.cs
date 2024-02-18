@@ -7,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace real_time_horror_group4;
+
 
 public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 {
@@ -33,14 +33,7 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
 
             }
-            if (path.Contains("/leaderboard"))
-            {
-
-
-                return leaderboard(); // här vill vi return senaste metoden.
-
-
-            }
+           
             if (path.Contains("/User"))
             {
                 return user();
@@ -61,16 +54,7 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
     
 
 
-    public string leaderboard()
-    {
-        string qleaderboard = @"SELECT * FROM leaderboard);";
-
-        return qleaderboard;
-
-
-
-
-    }
+    
 
     public string user()
     {

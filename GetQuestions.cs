@@ -9,12 +9,12 @@ public class GetQuestions
         _db = db;
     }
 
-    public async Task GetRandomQuestion()
+    public async Task GetRandomQuestion(string test)
     {
         int maxNum = 0;
         string question = "failed";
         string answer = "test";
-        
+
         Random random = new Random();
         int num = random.Next(1, 31);
 
@@ -25,9 +25,12 @@ public class GetQuestions
         {
             question = reader.GetString(0);
         }
-        Console.WriteLine("the riddle is as follows: " + question);
 
+        string finalLine = "the riddle is as follows: " + question;
+        test = finalLine;
+        /*
         string userInput = Console.ReadLine();
+
 
         await using var getAnswer =
             _db.CreateCommand("SELECT answer FROM CorrectAnswers WHERE questionid = $1 AND answer = $2");
@@ -49,6 +52,7 @@ public class GetQuestions
         {
             Console.WriteLine("Correct!!!");
         }
-    } 
-    
+        */
+    }
+
 }

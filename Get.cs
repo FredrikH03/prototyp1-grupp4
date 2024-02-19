@@ -6,7 +6,7 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-
+using real_time_horror_group4;
 
 
 public class Get(HttpListenerRequest request, NpgsqlDataSource db)
@@ -17,7 +17,9 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
     public string test()
     {
 
-        string test = "test";
+        GetQuestions question = new GetQuestions(db);
+        string test = null;
+        question.GetRandomQuestion(test);
 
         return test;
 

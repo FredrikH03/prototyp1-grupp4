@@ -27,7 +27,7 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
     {
         if(path != null)
         {
-            if (path.Contains("/test"))
+            if (path.Contains("/questions"))
             {
                 return test(); 
 

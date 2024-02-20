@@ -14,24 +14,13 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
     public string? path = request.Url.AbsolutePath;
     public string? Lastpath = request.Url.AbsolutePath.Split("/").Last();
 
-    public string test()
-    {
-
-        GetQuestions question = new GetQuestions(db);
-        string test = null;
-        question.GetRandomQuestion(test);
-
-        return test;
-
-    }
-     
     public string getter()// vi kör denna typen av metoden för vi vill returna string, void returnar inte.
     {
         if(path != null)
         {
             if (path.Contains("/questions"))
             {
-                return test(); 
+                return test().ToString(); 
 
 
             }
@@ -41,22 +30,22 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
                 return user();
             }
 
-
-
         }
-
-
 
         return "not found";
 
     }
 
+    public async Task<string> test()
+    {
 
-     
-    
+        GetQuestions question = new GetQuestions(db);
+        string test = null;
+        await question.GetRandomQuestion(test);
 
+        return test;
 
-    
+    }
 
     public string user()
     {
@@ -67,6 +56,5 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
        return qUser;
 
     }
-
 
 }

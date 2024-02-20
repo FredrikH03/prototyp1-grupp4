@@ -26,8 +26,8 @@ public class GetQuestions
             question = reader.GetString(0);
         }
 
-        string finalLine = "the riddle is as follows: " + question;
-        test = finalLine;
+        string returnString = "the question is as follows: " + question;
+        test = returnString;
         /*
         string userInput = Console.ReadLine();
 

@@ -15,6 +15,12 @@ await using var db = NpgsqlDataSource.Create(connectionString); // kopplingen st
 Tables table = new Tables(db);
 await table.CreateTables();
 
+
+InsertInfo insert = new InsertInfo(db); 
+await insert.PopulateQuestions();
+await insert.PopulateAnswers();
+
+
 bool listen = true;
 
 Console.CancelKeyPress += delegate (object? sender, ConsoleCancelEventArgs e) // med hjälp av detta så kan vi göra listen till false med ctrl C
@@ -64,9 +70,6 @@ void Router(HttpListenerContext context)
 
     Post p = new Post(db, request, response);
 
-    switch (request.HttpMethod)
-    {
-
         case ("GET"):
             byte[] buffer = Encoding.UTF8.GetBytes(getters.Getter());
             response.ContentType = "text/plain";
@@ -90,22 +93,35 @@ void Router(HttpListenerContext context)
         default:
             NotFound(response);
             break;
+        HttpListenerRequest request = context.Request;
+        HttpListenerResponse response = context.Response;
+        Get getters = new Get(request, db);
+
+
+    void RootGet(HttpListenerResponse response)
+    {
+        string message = "test"; // byt ut till vilken text som ska skickas tillbaka
+        byte[] buffer = Encoding.UTF8.GetBytes(message);
+        response.ContentType = "text/plain";
+        response.StatusCode = (int)HttpStatusCode.OK;
+
+        response.OutputStream.Write(buffer, 0, buffer.Length);
+        response.OutputStream.Close();
     }
-}
 
 
-void RootPost(HttpListenerRequest req, HttpListenerResponse res)
-{
-    StreamReader reader = new(req.InputStream, req.ContentEncoding);
-    string body = reader.ReadToEnd();
+    void RootPost(HttpListenerRequest req, HttpListenerResponse res)
+    {
+        StreamReader reader = new(req.InputStream, req.ContentEncoding);
+        string body = reader.ReadToEnd();
 
+        // metod här för att hantera request body 
+        Console.WriteLine($"Created the following in db: {body}");
 
-    // metod här för att hantera request body 
-    Console.WriteLine($"Created the following in db: {body}");
+        res.StatusCode = (int)HttpStatusCode.Created;
+        res.Close();
+    }
 
-    res.StatusCode = (int)HttpStatusCode.Created;
-    res.Close();
-}
 
 
 void NotFound(HttpListenerResponse res)

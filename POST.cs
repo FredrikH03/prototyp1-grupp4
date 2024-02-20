@@ -109,10 +109,3 @@ public class Post
         response.Close();
     }
 }
-
-
-// skillnad på listener.start och begingetcontext
-// fråga om streamreader
-// fråga om de inbbyggda classerna och context
-//fråga om när en class har parametrar
-// fråga om hur jag kan returna en ny meny när inloggad

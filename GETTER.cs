@@ -24,7 +24,6 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
     }
 
-
         public string ShowQuestions()
     {
         string qShow = @"SELECT questions FROM questions";

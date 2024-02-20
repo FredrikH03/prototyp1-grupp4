@@ -11,6 +11,7 @@ await using var db = NpgsqlDataSource.Create(connectionString);
 
 Tables table = new Tables(db);
 await table.CreateTables();
+await table.PopulateDevData();
 
 //InsertInfo insert = new InsertInfo(db);
 //await insert.PopulateQuestions();
@@ -70,7 +71,7 @@ void HandleRequest(IAsyncResult result)
         {
 
             case ("GET"):
-                byte[] buffer = Encoding.UTF8.GetBytes(getters.getter());
+                byte[] buffer = Encoding.UTF8.GetBytes(getters.Getter());
                 response.ContentType = "text/plain";
                 response.StatusCode = (int)HttpStatusCode.OK;
 
@@ -99,16 +100,7 @@ void HandleRequest(IAsyncResult result)
 
 
 
-    void Leaderboard(HttpListenerResponse response)
-    {
-        string message = "hello"; // byt ut till vilken text som ska skickas tillbaka
-        byte[] buffer = Encoding.UTF8.GetBytes(message);
-        response.ContentType = "text/plain";
-        response.StatusCode = (int)HttpStatusCode.OK;
-
-        response.OutputStream.Write(buffer, 0, buffer.Length);
-        response.OutputStream.Close();
-    }
+    
 
     void RootPost(HttpListenerRequest req, HttpListenerResponse res)
     {

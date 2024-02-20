@@ -40,6 +40,9 @@ public class Tables(NpgsqlDataSource db)
          losses INT, userID INT REFERENCES Users(ID)
          );";
 
+        string qGames =
+         @"create table if not exists games (id serial primary key, player_1 int references Users(id))";
+
         await db.CreateCommand(qUsers).ExecuteNonQueryAsync();
         await db.CreateCommand(qOptions).ExecuteNonQueryAsync();
         await db.CreateCommand(qQuestions).ExecuteNonQueryAsync();

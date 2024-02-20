@@ -14,6 +14,7 @@ await using var db = NpgsqlDataSource.Create(connectionString); // kopplingen st
 Tables table = new Tables(db);
 await table.CreateTables();
 
+
 bool listen = true;
 
 Console.CancelKeyPress += delegate (object? sender, ConsoleCancelEventArgs e) // med hjälp av detta så kan vi göra listen till false med ctrl C
@@ -91,7 +92,6 @@ void Router(HttpListenerContext context)
             break;
     }
 }
-
 
 void RootPost(HttpListenerRequest req, HttpListenerResponse res)
 {

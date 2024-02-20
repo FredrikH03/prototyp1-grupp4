@@ -36,12 +36,12 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
     }
 
-    public async Task<string> test()
+    public  string test()
     {
 
         GetQuestions question = new GetQuestions(db);
         string test = null;
-        await question.GetRandomQuestion(test);
+         test = question.GetRandomQuestion();
 
         return test;
 

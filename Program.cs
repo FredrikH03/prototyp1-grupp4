@@ -12,10 +12,6 @@ await using var db = NpgsqlDataSource.Create(connectionString);
 Tables table = new Tables(db);
 await table.CreateTables();
 
-        GetQuestions question = new GetQuestions(db);
-        string test = null;
-        await question.GetRandomQuestion(test);
-Console.WriteLine(test);
 
 //InsertInfo insert = new InsertInfo(db);
 //await insert.PopulateQuestions();
@@ -84,6 +80,7 @@ void HandleRequest(IAsyncResult result)
                 break;
             case ("POST"):
                 RootPost(request, response);
+                
                 break;
             default:
                 NotFound(response);
@@ -117,11 +114,32 @@ void HandleRequest(IAsyncResult result)
 
     void RootPost(HttpListenerRequest req, HttpListenerResponse res)
     {
+        GetQuestions userInput = new GetQuestions(db);
         StreamReader reader = new(req.InputStream, req.ContentEncoding);
         string body = reader.ReadToEnd();
 
         // metod här för att hantera request body 
-        Console.WriteLine($"Created the following in db: {body}");
+        string[] splitBody = body.Split(',');
+
+        if (req.Url.AbsolutePath == "/questions")
+        {
+            string userId = splitBody[0];
+            string answer = splitBody[1];
+            string questionId = splitBody[2];
+
+            userInput.AnswerQuestion(userId, answer, questionId);
+            
+            Console.WriteLine($"Created the following in db: {body}");
+            Console.WriteLine();
+        }
+        
+        if (req.Url.AbsolutePath == "/test")
+        {
+            Console.WriteLine($"shimmy shimmy ya");
+        }
+        Console.WriteLine(splitBody);
+
+        //Console.WriteLine($"Created the following in db: {body}");
 
         res.StatusCode = (int)HttpStatusCode.Created;
         res.Close();

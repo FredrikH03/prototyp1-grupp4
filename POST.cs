@@ -8,5 +8,6 @@ namespace real_time_horror_group4
 {
     internal class POST
     {
+        
     }
 }

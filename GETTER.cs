@@ -22,7 +22,7 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
     }
 
-    public string ShowQuestions() // behöver fixas
+    public string ShowQuestions()
     {
         string qShow = @"SELECT questions, A, B, C
                      FROM questions

@@ -1,34 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Net;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using Npgsql;
 
 namespace real_time_horror_group4
 {
     public class Authenticator
     {
+        private NpgsqlDataSource _database;
         private HttpListenerContext _httpListenerContext;
-        
-        public Authenticator(HttpListenerContext httpListenerContext)
+
+        public  Authenticator(HttpListenerContext httpListenerContext, NpgsqlDataSource database)
         {
-            List<User> users = new List<User>();
-          _httpListenerContext = httpListenerContext;
+            _database = database;
+            _httpListenerContext = httpListenerContext;
+
             switch (_httpListenerContext.Request.Url.AbsolutePath)
             {
-                case "/login/":
+                case "/login":
                 {
-                        Login(users);
+                        Login(GetUsers().Result);
                         break;
                 }
-                case "/register/":
+                case "/register":
                 {
-                        Register(users);
+                        Register(GetUsers().Result);
                         break;
                 }
             }
+        }
+
+        private async Task<List<User>> GetUsers() 
+        {
+            List<User> users = new List<User>();
+            await using NpgsqlCommand command = _database.CreateCommand("SELECT username, password FROM users");
+            await using NpgsqlDataReader reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                users.Add(new User(reader.GetString(0), reader.GetString(1)));
+            }
+            return users;
         }
 
         private void OutputMessage(string message)
@@ -37,17 +54,9 @@ namespace real_time_horror_group4
             _httpListenerContext.Response.OutputStream.Write(buffer);
         }
 
-        private int GetLargestId(List<User> users)
-        {
-            int largestId = users.Max(id => users.Count);
-            largestId++;
-            return largestId;
-        }
-
         private bool Login(List<User> users)
         {
             bool success = false;
-            OutputMessage("<Username>,<Password>");
             string[] userLoginRequest = _httpListenerContext.Request.InputStream.ToString().Split(',');
 
             foreach (User user in users)
@@ -57,7 +66,6 @@ namespace real_time_horror_group4
                     OutputMessage($@"Successful authentication. 
                                                       Your session ID is {user.Id}.
                                                       Usage: <ID>,<commands>");
-                    //Save session GUID to database.
                     
                     string successfullLoginMessage = "Successful login registration";
                     OutputMessage(successfullLoginMessage);
@@ -69,18 +77,23 @@ namespace real_time_horror_group4
             return success;
         }
 
-        public void Register(List<User> users)
+        private async Task AddUserToDatabase(User user)
         {
-            OutputMessage("<Username>,<Password>");
+            string command = @$"INSERT INTO users(username, password)
+                                                 VALUES({user.Username}, {user.Password})";
+            await _database.CreateCommand(command).ExecuteNonQueryAsync();
+        }
+
+        public async Task Register(List<User> users)
+        {            
             string[] userRegistrationRequest = _httpListenerContext.
                                                                       Request.
                                                                       InputStream.
                                                                       ToString().
                                                                       Split(',');
-
-            users.Add(new User(userRegistrationRequest[0],
-                                              userRegistrationRequest[1],
-                                              GetLargestId(users)));
+            User registratedUser = new User(userRegistrationRequest[0], userRegistrationRequest[1]);
+            users.Add(registratedUser);
+            await AddUserToDatabase(registratedUser);
 
             string successfullRegistrationMessage = "Successful user registration";
             OutputMessage(successfullRegistrationMessage);

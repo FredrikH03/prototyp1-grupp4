@@ -17,11 +17,10 @@ namespace real_time_horror_group4
         public string Username => _username; 
         public string Password => _password; 
 
-        public User(string username, string password, int id)
+        public User(string username, string password)
         { 
             _username = username;
             _password = password;
-            _id = id;
         }
     }
 }

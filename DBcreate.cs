@@ -5,14 +5,14 @@ public class Tables(NpgsqlDataSource db)
     public async Task CreateTables()
     {
         await db.CreateCommand("DROP TABLE IF EXISTS correctanswers").ExecuteNonQueryAsync();
+        await db.CreateCommand("DROP TABLE IF EXISTS leaderboard").ExecuteNonQueryAsync();
+        await db.CreateCommand("DROP TABLE IF EXISTS users").ExecuteNonQueryAsync();
         await db.CreateCommand("DROP TABLE IF EXISTS questions").ExecuteNonQueryAsync();
-        await db.CreateCommand("DROP TABLE IF EXISTS qusers").ExecuteNonQueryAsync();
-        await db.CreateCommand("DROP TABLE IF EXISTS Leaderboard").ExecuteNonQueryAsync();
 
-
-        string qUsers = @"
-         CREATE TABLE IF NOT EXISTS Users(
-         ID SERIAL PRIMARY KEY, 
+        // skapar userID automatiskt.
+        string qUsers = @" 
+         CREATE TABLE IF NOT EXISTS Users( 
+         id SERIAL PRIMARY KEY, 
          username TEXT, password TEXT
         );";
 
@@ -23,7 +23,7 @@ public class Tables(NpgsqlDataSource db)
 
 
         string qAnswers = @"
-         CREATE TABLE IF NOT EXISTS CorrectAnswers( 
+         CREATE TABLE IF NOT EXISTS correctanswers( 
          ID SERIAL PRIMARY KEY, answer TEXT, 
          questionID INT REFERENCES Questions(ID)
         );";
@@ -73,7 +73,16 @@ public class Tables(NpgsqlDataSource db)
 
     }
 
+    public async Task PopulateDevData()
+    {
+        await db.CreateCommand("insert into users (username, password) values ('example_users', 'password123')").ExecuteReaderAsync();
+        await db.CreateCommand("insert into leaderboard (wins, losses, userid) values (3, 4, 1)").ExecuteReaderAsync();
 
+
+
+
+
+    }
 
 
 

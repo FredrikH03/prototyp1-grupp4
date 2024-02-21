@@ -11,21 +11,12 @@ await using var db = NpgsqlDataSource.Create(connectionString);
 
 Tables table = new Tables(db);
 await table.CreateTables();
-
+await table.PopulateDevData();
 
 <<<<<<< Updated upstream
 //InsertInfo insert = new InsertInfo(db);
-//Console.WriteLine("do you want to populate questions and answers? y/N");
-//switch (Console.ReadLine())
-//{
-//    case "y":
-//        await insert.PopulateQuestions();
-//        await insert.PopulateAnswers();
-//        break;
-//    default:
-//        break;
-//}
-
+//await insert.PopulateQuestions();
+//await insert.PopulateAnswers();
 
 
 =======
@@ -112,16 +103,7 @@ void HandleRequest(IAsyncResult result)
 
 
 
-    void Leaderboard(HttpListenerResponse response)
-    {
-        string message = "hello"; // byt ut till vilken text som ska skickas tillbaka
-        byte[] buffer = Encoding.UTF8.GetBytes(message);
-        response.ContentType = "text/plain";
-        response.StatusCode = (int)HttpStatusCode.OK;
-
-        response.OutputStream.Write(buffer, 0, buffer.Length);
-        response.OutputStream.Close();
-    }
+    
 
     void RootPost(HttpListenerRequest req, HttpListenerResponse res)
     {

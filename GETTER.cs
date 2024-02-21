@@ -70,7 +70,7 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
     public string GetLeaderboard()
     {
         string qboard = @"SELECT wins, losses, userid FROM leaderboard
-                        ORDER BY DESC wins";
+                        ORDER BY wins DESC";
         string result = string.Empty;
 
         using (var reader = db.CreateCommand(qboard).ExecuteReader())

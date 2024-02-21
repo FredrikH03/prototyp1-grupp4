@@ -1,4 +1,5 @@
 ﻿using Npgsql;
+using real_time_horror_group4;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -49,6 +50,24 @@ public class Post
                 SendResponse(result);
 
             }
+            else if (path.Contains("answer"))
+            {
+                GetQuestions getquestions = new GetQuestions(db);
+
+                string[] userAnswer = body.Split(",");
+                string userId = userAnswer[0];
+                string answeroption = userAnswer[1];
+                string questionId = userAnswer[2];
+
+
+
+                getquestions.AnswerQuestion(userId,answeroption,questionId);
+
+                string result = getquestions.IsCorrectAnswer ? "Correct! " : "Wrong answer ";
+                SendResponse1(result);
+
+            }
+
 
         }
         else
@@ -90,6 +109,15 @@ public class Post
             }
             return count > 0;
         }
+    }
+
+    private void SendResponse1(string result)
+    {
+        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(result);
+        response.ContentType = "text/plain";
+        response.StatusCode = (int)HttpStatusCode.OK;
+        response.OutputStream.Write(buffer, 0, buffer.Length);
+        response.OutputStream.Close();
     }
 
 

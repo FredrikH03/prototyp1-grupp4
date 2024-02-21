@@ -8,7 +8,7 @@ public class Tables(NpgsqlDataSource db)
         await db.CreateCommand("DROP TABLE IF EXISTS qusers").ExecuteNonQueryAsync();
         await db.CreateCommand("DROP TABLE IF EXISTS Leaderboard").ExecuteNonQueryAsync();
         await db.CreateCommand("DROP TABLE IF EXISTS options").ExecuteNonQueryAsync();
-
+        await db.CreateCommand("DROP TABLE IF EXISTS games").ExecuteNonQueryAsync();
 
         string qUsers = @"
          CREATE TABLE IF NOT EXISTS Users(
@@ -41,14 +41,24 @@ public class Tables(NpgsqlDataSource db)
          );";
 
         string qGames =
-         @"create table if not exists games (id serial primary key, player_1 int references Users(id))";
+         @"create table if not exists games (id serial primary key, 
+        player_1 int references Users(id), 
+        player_2 int references Users(id),
+        player_1_rights int,
+        player_1_questions_answered int,
+        player_2_rights int,
+        player_2_questions_answered int,
+        active bool);";
 
+        
+         
+         
         await db.CreateCommand(qUsers).ExecuteNonQueryAsync();
         await db.CreateCommand(qOptions).ExecuteNonQueryAsync();
         await db.CreateCommand(qQuestions).ExecuteNonQueryAsync();
         await db.CreateCommand(qAnswers).ExecuteNonQueryAsync();
         await db.CreateCommand(qLeaderboard).ExecuteNonQueryAsync();
-
+        await db.CreateCommand(qGames).ExecuteReaderAsync();
 
         string qOptions1 = @"INSERT INTO Options (A, B, C) VALUES
          ('A region of memory reserved for storing variables','A way to organize and group related classes, interfaces','A keyword used for conditional statements'),

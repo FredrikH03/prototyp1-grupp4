@@ -13,6 +13,7 @@ Tables table = new Tables(db);
 await table.CreateTables();
 
 
+<<<<<<< Updated upstream
 //InsertInfo insert = new InsertInfo(db);
 //Console.WriteLine("do you want to populate questions and answers? y/N");
 //switch (Console.ReadLine())
@@ -27,6 +28,8 @@ await table.CreateTables();
 
 
 
+=======
+>>>>>>> Stashed changes
 bool listen = true;
 
 /// Handle ctrl + c interup event, and gracefully shut down server

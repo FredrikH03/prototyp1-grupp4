@@ -67,6 +67,12 @@ public class Post
                 SendResponse1(result);
 
             }
+            else if (path.Contains("match"))
+            {
+                GameHandler gameHandler = new GameHandler(db);
+                string result = gameHandler.StartMatch(body);
+                SendResponse1(result);
+            }
 
 
         }

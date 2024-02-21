@@ -69,26 +69,19 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
     public string GetLeaderboard()
     {
-        string qboard = @"SELECT wins, losses, userid FROM leaderboard
-                        ORDER BY wins DESC";
+        string qLeaderboard = @"SELECT users.username, userid, wins, losses FROM leaderboard JOIN users ON users.id = leaderboard.userid ORDER BY wins DESC";
         string result = string.Empty;
 
-        using (var reader = db.CreateCommand(qboard).ExecuteReader())
+        using (NpgsqlDataReader leaderboardReader = db.CreateCommand(qLeaderboard).ExecuteReader())
         {
-
-
-            while (reader.Read())
+            while (leaderboardReader.Read())
             {
-                result += reader.GetInt32(0) + " wins ";
-
-                result += reader.GetInt32(1) + " losses ";
-
-                result += reader.GetInt32(2) + " userid ";
-
-
+                    result += $"Username: {leaderboardReader.GetString(0)} " +
+                                   $"Id: {leaderboardReader.GetInt32(1)} " +
+                                   $"Wins: {leaderboardReader.GetInt32(2)} " +
+                                   $"Losses: {leaderboardReader.GetInt32(3)}";
             }
         }
-
         return result;
     }
 

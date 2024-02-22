@@ -32,12 +32,12 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
         using (var reader = db.CreateCommand(qShow).ExecuteReader())
         {
-            if (reader.Read())
+            while (reader.Read())
             {
-                result += " Id:) " + reader.GetInt32(0);
+                result += "\nId:" + reader.GetInt32(0) + ") ";
                 result += reader.GetString(1) + "\nA) ";
                 result += reader.GetString(2) + "\nB) ";
-                result += reader.GetString(3) + "\nC)";
+                result += reader.GetString(3) + "\nC) ";
                 result += reader.GetString(4) + "\n\n ";
 
 
@@ -47,6 +47,50 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
         return result;
     }
 
+    public string GetUsers()
+    {
+        string qusers = @"SELECT username, password FROM users";
+        string result = string.Empty;
+
+        using (var reader = db.CreateCommand(qusers).ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                    result += reader.GetString(0) + ", ";
+                    result += reader.GetString(1) + ":";
+
+                  
+            }
+
+        }
+
+        return result;
+    }
+
+    public string GetLeaderboard()
+    {
+        string qboard = @"SELECT wins, losses, userid FROM leaderboard
+                        ORDER BY DESC wins";
+        string result = string.Empty;
+
+        using (var reader = db.CreateCommand(qboard).ExecuteReader())
+        {
+
+
+            while (reader.Read())
+            {
+                result += reader.GetInt32(0) + " wins ";
+
+                result += reader.GetInt32(1) + " losses ";
+
+                result += reader.GetInt32(2) + " userid ";
+
+
+            }
+        }
+
+        return result;
+    }
 
     public string Getter() 
     {
@@ -60,10 +104,14 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
             {
                 return ShowQuestions();
             }
-            //if (path.Contains("/"))
-            //{
-            //    return Leaderboard();
-            //}
+            if (path.Contains("/users"))
+            {
+                return GetUsers();
+            }
+            if (path.Contains("/leaderboard"))
+            {
+                return GetLeaderboard();
+            }
 
         }
         return "Not Found";

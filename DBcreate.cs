@@ -11,7 +11,7 @@ public class Tables(NpgsqlDataSource db)
         await db.CreateCommand("DROP TABLE IF EXISTS games").ExecuteNonQueryAsync();
 
         string qUsers = @"
-         CREATE TABLE IF NOT EXISTS Users(
+         CREATE TABLE IF NOT EXISTS users(
          ID SERIAL PRIMARY KEY, 
          username TEXT UNIQUE, password TEXT
         );";
@@ -50,15 +50,18 @@ public class Tables(NpgsqlDataSource db)
         player_2_questions_answered int,
         active bool);";
 
-        
-         
-         
+
         await db.CreateCommand(qUsers).ExecuteNonQueryAsync();
         await db.CreateCommand(qOptions).ExecuteNonQueryAsync();
         await db.CreateCommand(qQuestions).ExecuteNonQueryAsync();
         await db.CreateCommand(qAnswers).ExecuteNonQueryAsync();
         await db.CreateCommand(qLeaderboard).ExecuteNonQueryAsync();
         await db.CreateCommand(qGames).ExecuteReaderAsync();
+
+
+        string qInsertU = "INSERT INTO users(username, password) values ('example_users', 'password123');";
+
+        string qInsertL = "INSERT INTO leaderboard (wins, losses, userid) values (3, 4, 1);";
 
         string qOptions1 = @"INSERT INTO Options (A, B, C) VALUES
          ('A region of memory reserved for storing variables','A way to organize and group related classes, interfaces','A keyword used for conditional statements'),
@@ -83,18 +86,22 @@ public class Tables(NpgsqlDataSource db)
         string qInsertA = @"INSERT INTO correctanswers (answer, questionid) VALUES
          ('c', 1);";
 
+       
 
         await db.CreateCommand(qOptions1).ExecuteReaderAsync();
         await db.CreateCommand(qInsertQ).ExecuteReaderAsync();
         await db.CreateCommand(qInsertA).ExecuteReaderAsync();
+        await db.CreateCommand(qInsertU).ExecuteReaderAsync();
+        await db.CreateCommand(qInsertL).ExecuteReaderAsync();
+
+
+
+
+
+
 
 
     }
-
-
-
-
-
 }
 
 

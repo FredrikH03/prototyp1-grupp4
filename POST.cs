@@ -52,7 +52,7 @@ public class Post
             }
             else if (path.Contains("answer"))
             {
-                GetQuestions getquestions = new GetQuestions(db);
+                AnswerHandler getquestions = new AnswerHandler(db);
 
                 string[] userAnswer = body.Split(",");
                 string userId = userAnswer[0];

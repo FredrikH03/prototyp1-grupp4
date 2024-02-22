@@ -67,11 +67,12 @@ public class Post
                 SendResponse1(result);
 
             }
-            else if (path.Contains("match"))
+            else if (path.Contains("startmatch"))
             {
                 GameHandler gameHandler = new GameHandler(db);
                 string result = gameHandler.StartMatch(body);
-                SendResponse1(result);
+                Console.WriteLine(result);
+                SendResponse2(result);
             }
 
 
@@ -135,6 +136,16 @@ public class Post
         response.OutputStream.Write(buffer, 0, buffer.Length);
         response.OutputStream.Close();
     }
+    
+    private void SendResponse2(string result)
+    {
+        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(result);
+        response.ContentType = "text/plain";
+        response.StatusCode = (int)HttpStatusCode.OK;
+        response.OutputStream.Write(buffer, 0, buffer.Length);
+        response.OutputStream.Close();
+    }
+    
     public void NotFound()
     {
         response.StatusCode = (int)HttpStatusCode.NotFound;

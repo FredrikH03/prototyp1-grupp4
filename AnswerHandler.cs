@@ -6,11 +6,12 @@ namespace real_time_horror_group4;
 public class GetQuestions
 {
     private readonly NpgsqlDataSource _db;
-
+    public bool IsCorrectAnswer = false;
     public GetQuestions(NpgsqlDataSource db)
     {
         _db = db;
     }
+
 
     public string GetRandomQuestion()
     {
@@ -35,8 +36,10 @@ public class GetQuestions
         */
     }
 
+
     public string AnswerQuestion(string userId, string userAnswer, string questionId)
     {
+        
         string answer = "test"; 
         int user = int.Parse(userId);
         int num = int.Parse(questionId);
@@ -62,7 +65,9 @@ public class GetQuestions
         {
             Console.WriteLine("Correct");
             Console.WriteLine(answer);
+            IsCorrectAnswer = true;
         }
+
         Console.WriteLine();
 
         //insert database connection

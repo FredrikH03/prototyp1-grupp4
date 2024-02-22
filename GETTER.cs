@@ -24,7 +24,7 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
 
     public string ShowQuestions()
     {
-        string qShow = @"SELECT questions, A, B, C
+        string qShow = @"SELECT questions.ID,questions, A, B, C
                      FROM questions
                      JOIN options ON optionsid = optionsid";
 
@@ -34,10 +34,12 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
         {
             if (reader.Read())
             {
-                result += reader.GetString(0) + "\nA) ";
-                result += reader.GetString(1) + "\nB) ";
-                result += reader.GetString(2) + "\nC) ";
-                result += reader.GetString(3) + "\n\n ";
+                result += " Id:) " + reader.GetInt32(0);
+                result += reader.GetString(1) + "\nA) ";
+                result += reader.GetString(2) + "\nB) ";
+                result += reader.GetString(3) + "\nC)";
+                result += reader.GetString(4) + "\n\n ";
+
 
             }
         }
@@ -46,7 +48,7 @@ public class Get(HttpListenerRequest request, NpgsqlDataSource db)
     }
 
 
-    public string Getter()
+    public string Getter() 
     {
         if (path != null)
         {

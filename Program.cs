@@ -11,7 +11,7 @@ string connectionString = "Host=localhost;Port=5455;Username=postgres;Password=p
 
 await using var db = NpgsqlDataSource.Create(connectionString); // kopplingen startar med min databas
 
-//Tables table = new Tables(db);
+Tables table = new Tables(db); 
 //await table.CreateTables();
 
 

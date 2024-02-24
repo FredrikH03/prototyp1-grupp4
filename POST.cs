@@ -71,7 +71,6 @@ public class Post
             {
                 GameHandler gameHandler = new GameHandler(db);
                 string result = gameHandler.StartMatch(body);
-                Console.WriteLine(result);
                 SendResponse2(result);
             }
 

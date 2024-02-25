@@ -30,11 +30,23 @@ public class AnswerHandler
             answer = reader2.GetString(0);
         }
 
+        var result = "0";
         //Console.WriteLine(answer);
         if (answer == "test")
         {
             Console.WriteLine("wrong");
             Console.WriteLine(answer);
+            
+        using var getUserId =
+            _db.CreateCommand("SELECT player_1, player_2 FROM games WHERE active = true AND player_2 = $1 OR player_1 = $1;");
+        getUserId.Parameters.AddWithValue(user);
+        using var reader3 = getUserId.ExecuteReader();
+        while (reader3.Read())
+        {
+            result = reader3.GetString(0);
+        }
+        Console.WriteLine(result.ToString());
+            
         }
         else
         {
